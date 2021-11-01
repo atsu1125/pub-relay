@@ -49,7 +49,7 @@ class PubRelay::WebServer::InboxHandler
     inbox_url = URI.parse(actor.inbox_url) rescue nil
     error(400, "Inbox URL was not a valid URL") unless inbox_url
 
-    if actor.pleroma_relay?
+    if activity.object_id != Activity::PUBLIC_COLLECTION
       @subscription_manager.send(
         SubscriptionManager::FollowSent.new(
           domain: actor.domain,
@@ -58,8 +58,6 @@ class PubRelay::WebServer::InboxHandler
           following_actor_id: actor.id
         )
       )
-    elsif activity.object_id != Activity::PUBLIC_COLLECTION
-      error(400, "Follow only allowed for #{Activity::PUBLIC_COLLECTION}")
     end
 
     @subscription_manager.send(

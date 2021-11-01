@@ -13,6 +13,7 @@ services:
 
   relay:
     build: .
+    image: atsu1125/pub-relay:latest
     restart: always
     networks:
       - external_network

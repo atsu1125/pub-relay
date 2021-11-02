@@ -11,7 +11,7 @@ services:
     volumes:
       - ./redis:/data
 
-  relay:
+  pub-relay:
     build: .
     image: atsu1125/pub-relay:latest
     restart: always

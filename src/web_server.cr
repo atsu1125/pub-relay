@@ -69,6 +69,8 @@ class PubRelay::WebServer
         serve_stats(context)
       when {"POST", "/inbox"}
         handle_inbox(context)
+      when {"GET", "/"}
+        serve_index(context)
       else
         call_next(context)
       end
@@ -254,6 +256,28 @@ class PubRelay::WebServer
   private def serve_stats(ctx)
     ctx.response.content_type = "application/json"
     @stats.to_json(ctx.response)
+  end
+
+  private def serve_index(ctx)
+    ctx.response.content_type = "text/html"
+    ctx.response.print "
+<!DOCTYPE html>
+<html><head>
+<title>ActivityPub Relay at #{@domain}</title>
+<style>
+p { color: #FFFFFF; font-family: monospace, arial; font-size: 100%; }
+body { background-color: #000000; }
+</style>
+</head>
+<body>
+<p>This is an Activity Relay at #{@domain} (#{PubRelay::VERSION}) for fediverse instances.</p>
+<br>
+<p>You may subscribe to this relay with the address: <a href='https://#{@domain}/inbox'>#{@domain}/inbox</a></p>
+<p>To host your own relay, you may download the code at this address: <a href='https://github.com/atsu1125/pub-relay'>github.com/atsu1125/pub-relay</a></p>
+<br>
+<p>Visit <a href='nodeinfo/2.0'>nodeinfo 2.0</a> to check connecting instances.</p>
+<p>Visit <a href='stats'>stats</a> to check delivery status.</p>
+</body></html>"
   end
 
   private def handle_inbox(context)

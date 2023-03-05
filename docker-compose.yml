@@ -25,6 +25,8 @@ services:
     volumes:
       - ./.env:/relay/.env:ro
       - ./actor.pem:/relay/actor.pem:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider --proxy=off localhost:8085/stats || exit 1"]
 
 networks:
   external_network:

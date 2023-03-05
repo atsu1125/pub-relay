@@ -1,4 +1,4 @@
-FROM crystallang/crystal:1.1.1-alpine AS base
+FROM crystallang/crystal:1.7.2-alpine AS base
 WORKDIR /relay
 
 FROM base AS builder
